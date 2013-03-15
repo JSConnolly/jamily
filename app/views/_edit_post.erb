@@ -1,0 +1,9 @@
+<form name="edit" action="/posts/<%= @post.id %>" method="POST">
+  <label for="title">Title:</label>
+  <input type="text" name="post[title]" value="<%= @post.title %>"> <br>
+  <label for="body">Body:</label>
+  <textarea name="post[body]" rows="20" cols="50"><%= @post.body %></textarea>
+  tags (comma separated): <input type="text" name="tags" value="<%= @post.tags.map{|tag| tag.content }.join(", ") %>">
+  <input type="hidden" name="_method" value="PUT">
+  <input type="submit" value="Save changes &raquo;">
+</form>
