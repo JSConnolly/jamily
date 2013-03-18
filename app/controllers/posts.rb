@@ -1,22 +1,30 @@
 get '/posts' do
-  erb :"_posts"
+  @posts = Post.all
+  erb :posts
 end
 
 
 get '/posts/new' do
+  @errors = session[:errors]
+  session[:errors] = nil
   erb :"new"
 end
 
 
 post '/posts/new' do
-  @post = Post.create( params[:post] )
-  if params[:tags]
-    parse_tags( params[:tags] ).each do |tag|
-      @post.tags << tag
+  @post = Post.new( params[:post] )
+  if @post.valid?
+    if params[:tags]
+      parse_tags( params[:tags] ).each do |tag|
+        @post.tags << tag
+      end
     end
+    @post.save
+    redirect "/posts/#{@post.id}}"
+  else
+    session[:errors] = @post.errors.full_messages
+    redirect "/posts/new"
   end
-
-  redirect "/posts/#{@post.id}}"
 end
 
 

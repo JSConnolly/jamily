@@ -1,12 +1,17 @@
-<h2>All Posts</h2>
 <dl>
-  <% Post.all.each do |post| %>
+  <% @posts.each do |post| %>
     <dt><a href="/posts/<%= post.id %>"><%= post.title %></a></dt>
-    <dd><%= post.body %></dd>
+    <dd><%= post.body.slice(/^.*(?=(\n.+))?/) + ($1 ? "<br>..." : "") %><br>
+    <% post.tags.each do |tag| %>
+      <small><a href="/tags/<%= tag.id %>"><%= tag.content %></a></small></dd>
+    <% end %>
+    <br><br>
     <a href="/posts/<%= post.id %>/edit" class='btn btn-edit'>edit</a>
     <form name="delete" action="/posts/<%= post.id  %>" method="POST">
       <input type="hidden" name="_method" value="DELETE">
       <input class="btn btn-delete" type="submit" value="delete">
     </form>
+    <div class="break"></div>
+    <br>
   <% end %>
 </dl>
